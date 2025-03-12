@@ -1,31 +1,44 @@
 {
-    "name": "cancelation-service",
+    "name": "axiom-cancellation-service",
     "version": "1.0.0",
-    "description": "Cancelation service API",
+    "description": "A cancellation service with Axiom logging integration",
     "main": "index.ts",
     "scripts": {
-      "start": "ts-node index.ts",
-      "dev": "ts-node-dev --respawn index.ts",
-      "build": "tsc",
-      "test": "jest",
-      "test:watch": "jest --watch",
-      "test:coverage": "jest --coverage"
+        "start": "ts-node index.ts",
+        "dev": "ts-node-dev --respawn --transpile-only index.ts",
+        "test": "jest",
+        "quality-check": "ts-node quality-check.ts",
+        "format": "prettier --write '**/*.{ts,js,json}'"
     },
+    "keywords": [
+        "axiom",
+        "logging",
+        "cancellation",
+        "service",
+        "fastify"
+    ],
+    "author": "",
+    "license": "MIT",
     "dependencies": {
-      "@fastify/swagger": "^8.14.0",
-      "@scalar/fastify-api-reference": "^1.20.3",
-      "@sinclair/typebox": "^0.32.15",
-      "@types/node": "^20.0.0",
-      "fastify": "^4.26.2",
-      "ts-node": "^10.9.2",
-      "typescript": "^5.0.0"
+        "@axiomhq/js": "^1.0.0",
+        "@fastify/autoload": "^5.7.1",
+        "@fastify/swagger": "^8.12.0",
+        "@scalar/fastify-api-reference": "^1.13.2",
+        "@sinclair/typebox": "^0.31.28",
+        "axios": "^1.6.2",
+        "dotenv": "^16.3.1",
+        "fastify": "^4.24.3",
+        "pino": "^8.16.2",
+        "pino-pretty": "^10.2.3"
     },
     "devDependencies": {
-      "@types/jest": "^29.5.12",
-      "@types/supertest": "^6.0.2",
-      "jest": "^29.7.0",
-      "supertest": "^6.3.4",
-      "ts-jest": "^29.1.2",
-      "ts-node-dev": "^2.0.0"
+        "@types/jest": "^29.5.10",
+        "@types/node": "^20.10.0",
+        "jest": "^29.7.0",
+        "prettier": "^3.1.0",
+        "ts-jest": "^29.1.1",
+        "ts-node": "^10.9.1",
+        "ts-node-dev": "^2.0.0",
+        "typescript": "^5.3.2"
     }
-  }
+}

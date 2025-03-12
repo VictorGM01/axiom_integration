@@ -1,28 +1,46 @@
-import fastify from "fastify";
-import cancelationController from "./cancelation.controller";
+import "dotenv/config";
+import { build } from "./app";
 
-const server = fastify({
-  logger: true,
-});
+const VERSION = "1.0.0";
 
-// Register the cancellation controller
-server.register(cancelationController);
-
-// Start the server
-const start = async () => {
+async function start() {
   try {
-    await server.listen({
-      port: 3000,
-      host: "0.0.0.0", // Listen on all network interfaces
-    });
-    console.log("Server is running on http://localhost:3000");
-    console.log(
-      "API Documentation available at http://localhost:3000/reference"
+    const app = build();
+
+    // Log environment information
+    app.log.info(`Starting Cancellation Service with Axiom logging`);
+    app.log.info(`Version: ${VERSION}`);
+    app.log.info(`Environment: ${process.env.NODE_ENV || "development"}`);
+    app.log.info(
+      `Axiom Dataset: ${process.env.AXIOM_DATASET_NAME || "cancellation-logs"}`
     );
-  } catch (err) {
-    server.log.error(err);
+
+    // Get the port and host from environment or use defaults
+    const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
+    const host = process.env.HOST || "0.0.0.0";
+
+    // Start the server
+    await app.listen({ port, host });
+    app.log.info(`Server is running at http://${host}:${port}`);
+    app.log.info(
+      `API Documentation available at http://${host}:${port}/reference`
+    );
+
+    // Register graceful shutdown
+    const shutdown = async () => {
+      app.log.info("Shutting down server...");
+      await app.close();
+      app.log.info("Server closed");
+      process.exit(0);
+    };
+
+    process.on("SIGINT", shutdown);
+    process.on("SIGTERM", shutdown);
+  } catch (error) {
+    console.error("Error starting server:", error);
     process.exit(1);
   }
-};
+}
 
+// Run the server
 start();
